@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs/dist/bcrypt.js";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import { generateToken } from "../lib/utils.js";
 export const signup =  async(req, res) => {
     const {fullName,email,password}=req.body;
@@ -7,7 +7,7 @@ export const signup =  async(req, res) => {
         if(!fullName||!email||!password){
             return res.status(400).json({message:"All fields are required"})//status code 400 means bad request
         }
-        if(password<6){
+        if(password.length < 6){
             return res.status(400).json({message:"Password must be atleast 6 characters"})
         }
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -32,11 +32,11 @@ export const signup =  async(req, res) => {
             generateToken(savedUser._id, res);
 
             res.status(201).json({
-                _id:newUser._id,
-                fullName:newUser._fullName,
-                email:newUser._email,
-                profilePic:newUser._profilePic,
-            })
+                _id: savedUser._id,
+                fullName: savedUser.fullName,
+                email: savedUser.email,
+                profilePic: savedUser.profilePic,
+            });
         }else{
             res.status(400).json({message:"Invalid User data"});
         }
